@@ -1,6 +1,6 @@
 # img-charts
 
-img-charts is a lightweight TypeScript library that provides a fluent API for managing ECharts visualizations. It simplifies chart initialization, updates, dimension handling, and exporting charts as images with type safety and built-in error handling.
+img-charts is a lightweight TypeScript library that provides a fluent API for managing ECharts visualizations. It simplifies chart initialization, updates, dimension handling, and exporting charts as images with type safety and built-in error handling. See the [Example](https://jibbex.github.io/img-charts/).
 
 ## Features
 
