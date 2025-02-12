@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "bun" # See documentation for possible values
-    enable-beta-ecosystems: true
+    enable_beta_ecosystems : true
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
