@@ -12,17 +12,9 @@ img-charts is a lightweight TypeScript library that provides a fluent API for ma
 
 ## Installation
 
-1. Clone the repository:
+1. Add the package with any package manager, e.g. `npm`:
    ```bash
-   git clone https://github.com/jibbex/echartstoimage.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd eChartsToImage
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
+   npm install https://github.com/jibbex/img-charts.git
    ```
 
 ## Usage

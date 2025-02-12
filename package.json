@@ -61,11 +61,11 @@
     "bugs": {
         "url": "https://github.com/jibbex/imgchart/issues"
     },
-    "homepage": "https://github.com/jibbex/imgchart#readme",
+    "homepage": "https://jibbex.github.io/img-charts/",
     "author": "Manfred Michaelis",
     "license": "MIT",
     "sideEffects": false,
-    "private": true,
+    "private": false,
     "publishConfig": {
         "access": "public"
     }
