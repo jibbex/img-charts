@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>img-charts - Fluent API for ECharts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/intellij-light.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" type="module" defer></script>
+</head>
+<body>
+    <header>
+        <h1>📊img-charts</h1>
+        <p>A lightweight TypeScript library for managing ECharts visualizations with ease.</p>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>img-charts is a TypeScript library that provides a fluent API for managing ECharts visualizations. It allows you to create, update, and export charts with ease.</p>
+        </section>
+
+        <section id="chart-section">
+            <img id="chart1" src="#" alt="chart" width="800" height="600">
+            <img id="chart2" src="#" alt="chart" width="800" height="600">
+        </section>
+
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>Fluent API for chart management</li>
+                <li>Type-safe chart configurations</li>
+                <li>Export charts as PNG, JPEG, SVG, or WebP</li>
+                <li>Built-in performance logging</li>
+                <li>Custom error handling</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Usage</h2>
+            <h3>Create a Chart</h3>
+            <pre><code class="language-typescript">
+const option: ChartOption = {
+    width: 1024,
+    height: 768,
+    // ...other ECharts options...
+};
+
+const chart = createChart(option);
+            </code></pre>
+
+            <h3>Update a Chart</h3>
+            <pre><code class="language-typescript">
+chart.update({
+    width: 1200,
+    // ...other ECharts options...
+});
+            </code></pre>
+
+            <h3>Export as Image</h3>
+            <pre><code class="language-typescript">
+const blob = await createChartImage({
+    option,
+    type: 'png',
+    quality: 2,
+});
+            </code></pre>
+
+            <h3>Get Image URL</h3>
+            <pre><code class="language-typescript">
+const imageUrl = await createChartImgSrc({
+    option,
+    type: 'jpeg',
+    quality: 2,
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Installation</h2>
+            <pre><code>
+git clone https://github.com/jibbex/echartstoimage.git
+cd eChartsToImage
+npm install
+            </code></pre>
+        </section>
+    </main>
+
+    <footer>
+        <p>Licensed under the MIT License. Contribute on <a href="https://github.com/jibbex/echartstoimage">GitHub</a>.</p>
+    </footer>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

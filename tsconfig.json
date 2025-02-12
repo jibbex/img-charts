@@ -1,0 +1,58 @@
+{
+    "compilerOptions": {
+        // Module settings
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        // Type checking
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "useUnknownInCatchVariables": true,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noPropertyAccessFromIndexSignature": true,
+        // Emit settings
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "removeComments": false,
+        // React settings
+        "jsx": "react",
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        // Project structure
+        "rootDir": "./src",
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": [
+                "*"
+            ]
+        },
+        // Additional features
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+    ]
+}
