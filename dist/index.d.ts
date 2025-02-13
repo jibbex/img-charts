@@ -34,6 +34,8 @@ interface ChartDimensions {
  * type safety for the core ECharts configuration.
  */
 interface ChartOption extends echarts.EChartsOption, Partial<ChartDimensions> {
+    /** Activate debug mode - default false */
+    debug?: boolean;
 }
 /**
  * Supported image export formats.
@@ -88,6 +90,7 @@ declare class Chart {
     private option;
     /** Canvas element used for rendering */
     private canvas;
+    private timing;
     /**
      * Creates a new Chart instance.
      * Initializes the chart with provided options and sets up the canvas
@@ -125,12 +128,21 @@ declare class Chart {
      */
     generateImage({ type, quality }: ImageGenerationOptions): Promise<Blob>;
     /**
+     * Generates a data URL for the current chart state.
+     * Converts the chart to a base64-encoded image string.
+     *
+     * @param ratio - Optional pixel ratio for high-DPI displays
+     * @returns The data URL string
+     */
+    generateSvg(ratio?: number): string;
+    /**
      * Provides access to the underlying chart object.
      * Allows for advanced chart manipulation and customization.
      *
      * @returns The ECharts instance used for rendering
      */
     getChart(): echarts.ECharts;
+    on(eventName: string, handler: (...args: unknown[]) => void): void;
     /**
      * Provides access to the underlying canvas element.
      * Useful for custom rendering or advanced manipulations.
@@ -151,14 +163,6 @@ declare class Chart {
      * @throws {ChartDimensionError} If dimensions are invalid
      */
     private validateOptions;
-    /**
-     * Logs performance metrics for chart operations.
-     * Helps with debugging and performance optimization.
-     *
-     * @param operation - Name of the operation being measured
-     * @param startTime - Start time of the operation
-     */
-    private logPerformance;
 }
 /**
  * Creates a new chart instance.
@@ -192,5 +196,13 @@ declare const createChartImgSrc: ({ option, type, quality }: {
     type: ChartImageType;
     quality: number;
 }) => Promise<string>;
+/**
+ * Creates a chart and exports it as an SVG string.
+ * Handles proper resource cleanup after SVG generation.
+ *
+ * @param option - Chart configuration
+ * @returns SVG string
+ */
+declare const createChartSvg: (option: ChartOption, ratio?: number) => string;
 
-export { ChartDimensionError, type ChartDimensions, ChartError, type ChartImageType, type ChartOption, type ImageGenerationOptions, createChart, createChartImage, createChartImgSrc };
+export { ChartDimensionError, type ChartDimensions, ChartError, type ChartImageType, type ChartOption, type ImageGenerationOptions, createChart, createChartImage, createChartImgSrc, createChartSvg, Chart as default };

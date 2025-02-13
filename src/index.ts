@@ -34,7 +34,10 @@ export interface ChartDimensions {
  * Using Partial<ChartDimensions> allows dimensions to be optional while maintaining
  * type safety for the core ECharts configuration.
  */
-export interface ChartOption extends echarts.EChartsOption, Partial<ChartDimensions> {}
+export interface ChartOption extends echarts.EChartsOption, Partial<ChartDimensions> {
+    /** Activate debug mode - default false */
+    debug?: boolean;
+}
 
 /**
  * Supported image export formats.
@@ -83,6 +86,85 @@ export class ChartDimensionError extends ChartError {
 }
 
 /**
+ * Utility class for performance monitoring.
+ * Provides a simple way to measure the duration of operations
+ * and log the results to the console.
+ */
+class Timing {
+    private startTime: number = 0;
+    private endTime: number = 0;
+    private verbose: boolean = false;
+
+    constructor(verbose: boolean = false) {
+        this.verbose = verbose;
+    }
+
+    /**
+     * Starts the timer.
+     * Sets the start time to the current timestamp.
+     * 
+     * @returns The Timing instance for method chaining
+     */ 
+    start() {
+        this.call(() => this.startTime = performance.now());
+        return this;
+    }
+
+    /**
+     * Ends the timer.
+     * Sets the end time to the current timestamp.
+     * 
+     * @returns The Timing instance for method chaining
+     */
+    end() {
+        this.call(() => this.endTime = performance.now());
+        return this;
+    }
+
+    /**
+     * Calculates the duration of the operation.
+     * Returns the difference between the end and start times.
+     * 
+     * @returns The duration in milliseconds
+     */
+    get duration() {
+        return this.endTime - this.startTime;
+    }
+
+    /**
+     * Logs the operation duration to the console.
+     * Outputs a formatted message with the operation label and duration.
+     * Stops the timer, if running, and resets the start and end times.
+     * 
+     * @param label - The label for the operation
+     */
+    log(label: string) {
+        this.call(() => {
+            if (this.startTime > 0 && this.endTime === 0) {
+                this.end();
+            }
+
+            console.log(`%c⏱️ ${label} took ${this.duration.toPrecision(4)}ms`, 'color: lightblue; font-weight: bold');
+            this.startTime = 0;
+            this.endTime = 0;
+        });
+    }
+
+    /**
+     * Internal utility function for conditional logging.
+     * Calls the provided function if verbose mode is enabled.
+     * 
+     * @param fn - Function to call if verbose mode is enabled
+     * @param args - Additional arguments to pass to the function
+     */
+    private call = (fn: (args: unknown[]) => void, ...args: unknown[]) => {
+        if (this.verbose) {
+            fn(args);
+        }
+    }
+}
+
+/**
  * Converts ChartImageType to corresponding MIME type.
  * This internal utility function ensures consistent MIME type usage
  * across the library.
@@ -123,6 +205,7 @@ class Chart {
     private option: echarts.EChartsOption;
     /** Canvas element used for rendering */
     private canvas: HTMLCanvasElement;
+    private timing: Timing;
 
     /**
      * Creates a new Chart instance.
@@ -133,8 +216,11 @@ class Chart {
      * @throws {ChartDimensionError} If dimensions are invalid
      */
     constructor(option: ChartOption) {
-        const startTime = performance.now();
+        this.timing = new Timing(option.debug || true);
+
+        this.timing.start();
         this.validateOptions(option);
+
         this.option = option;
         this.canvas = document.createElement('canvas');
 
@@ -145,7 +231,7 @@ class Chart {
 
         this.chart = echarts.init(this.canvas);
         this.update(option);
-        this.logPerformance('initialization', startTime);
+        this.timing.log('initialization');
     }
  
     /**
@@ -157,8 +243,7 @@ class Chart {
      * @returns The Chart instance for method chaining
      */
     update(option: ChartOption): Chart {
-        const startTime = performance.now();
-
+        this.timing.start();
         if (option.width || option.height) {
             this.setDimensions({
                 width: option.width || this.canvas.width,
@@ -184,7 +269,7 @@ class Chart {
         };
 
         this.chart.setOption(this.option);
-        this.logPerformance('update', startTime);
+        this.timing.log('update');
         return this;
     }
 
@@ -200,6 +285,7 @@ class Chart {
         this.validateOptions({width, height});
         this.canvas.width = width;
         this.canvas.height = height;
+        // this.chart.resize({width, height});
         return this;
     }
 
@@ -216,16 +302,31 @@ class Chart {
             throw new ChartError('Quality must be between 0 and 3');
         }
 
-        const startTime = performance.now();
+        this.timing.start();
         return new Promise((resolve, reject) => {
             this.canvas.toBlob((blob) => {
-                this.logPerformance('image generation', startTime);
+                this.timing.log('image generation');
                 if (blob) {
                     resolve(blob);
                 } else {
                     reject(new ChartError('Failed to generate image'));
                 }
             }, chartImageTypeToMime(type), quality);
+        });
+    }
+
+    /**
+     * Generates a data URL for the current chart state.
+     * Converts the chart to a base64-encoded image string.
+     * 
+     * @param ratio - Optional pixel ratio for high-DPI displays
+     * @returns The data URL string
+     */
+    generateSvg(ratio?: number): string {
+        return this.chart.getConnectedDataURL({
+            type: 'svg',
+            backgroundColor: 'transparent',
+            pixelRatio: ratio
         });
     }
 
@@ -237,6 +338,10 @@ class Chart {
      */
     getChart() {
         return this.chart;
+    }
+
+    on(eventName: string, handler: (...args: unknown[]) => void) {
+        this.chart.on(eventName, handler);
     }
 
     /**
@@ -272,20 +377,6 @@ class Chart {
         if (option.height && option.height <= 0) {
             throw new ChartDimensionError('Height must be positive');
         }
-    }
-
-    /**
-     * Logs performance metrics for chart operations.
-     * Helps with debugging and performance optimization.
-     * 
-     * @param operation - Name of the operation being measured
-     * @param startTime - Start time of the operation
-     */
-    private logPerformance(operation: string, startTime: number) {
-        console.debug(
-            `%c🚀 Chart ${operation} completed in ${performance.now() - startTime}ms`,
-            'color: coral; font-weight: bold'
-        );
     }
 }
 
@@ -342,3 +433,32 @@ export const createChartImgSrc = async ({
     const blob = await createChartImage({option, type, quality});
     return URL.createObjectURL(blob);
 }
+
+/**
+ * Creates a chart and exports it as an SVG string.
+ * Handles proper resource cleanup after SVG generation.
+ * 
+ * @param option - Chart configuration
+ * @returns SVG string
+ */
+export const createChartSvg = (
+    option: ChartOption, 
+    ratio?: number
+) => {
+    const perf = new Timing(true);
+    perf.start();
+    const chart = new Chart(option);
+    try {
+        const svg = chart.generateSvg(ratio);
+        perf.log('SVG generation');
+        return svg;
+    } finally {
+        chart.dispose();
+    }
+}
+
+/**
+ * Creates a chart and instance.
+ * Provides access to the chart object for advanced customization.
+ */
+export default Chart;

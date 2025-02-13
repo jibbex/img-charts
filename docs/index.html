@@ -48,7 +48,10 @@ const option: ChartOption = {
     // ...other ECharts options...
 };
 
+const img = document.querySelector('img#chart');
 const chart = createChart(option);
+
+img.src = chart.generateSvg(2);
             </code></pre>
 
             <h3>Update a Chart</h3>

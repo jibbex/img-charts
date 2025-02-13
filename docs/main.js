@@ -1,4 +1,4 @@
-import { createChart, createChartImgSrc } from './lib/bundle.js';
+import { createChartSvg } from './lib/bundle.js';
 import { data } from './data.js';
 
 let option = {
@@ -78,9 +78,11 @@ let option = {
 };
 
 const img1 = document.querySelector('img#chart1');
-createChartImgSrc({ option, type: 'png', quality: 3 }).then(source => {
-    img1.src = source;
-});
+// createChartImgSrc({ option, type: 'png', quality: 3 }).then(source => {
+//     img1.src = source;
+// });
+
+img1.src = createChartSvg(option, 1);
 
 let timeData = [
     '2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00', '2009/6/12 14:00', '2009/6/12 15:00', '2009/6/12 16:00', '2009/6/12 17:00', '2009/6/12 18:00', '2009/6/12 19:00', '2009/6/12 20:00', '2009/6/12 21:00', '2009/6/12 22:00', '2009/6/12 23:00',
@@ -256,6 +258,8 @@ option = {
 };
 
 const img2 = document.querySelector('img#chart2');
-createChartImgSrc({ option, type: 'png', quality: 3 }).then(source => {
-    img2.src = source;
-});
+// createChartImgSrc({ option, type: 'png', quality: 3 }).then(source => {
+    // img2.src = source;
+// });
+
+img2.src = createChartSvg(option, 2);

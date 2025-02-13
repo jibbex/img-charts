@@ -1,6 +1,6 @@
 {
     "name": "img-charts",
-    "version": "0.1.1",
+    "version": "0.2.1",
     "description": "High-level abstraction for creating, managing, and exporting ECharts visualizations",
     "keywords": [
         "img",
@@ -9,15 +9,15 @@
         "data",
         "array"
     ],
+    "types": "dist/index.d.ts",
     "main": "dist/index.cjs",
     "module": "dist/index.js",
-    "types": "dist/index.d.ts",
     "type": "module",
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "require": "./dist/index.cjs",
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "import": "./dist/index.js"
         }
     },
     "files": [

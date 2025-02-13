@@ -73016,7 +73016,7 @@ class Chart {
   canvas;
   timing;
   constructor(option) {
-    this.timing = new Timing(option.debug || true);
+    this.timing = new Timing(option.debug);
     this.timing.start();
     this.validateOptions(option);
     this.option = option;
@@ -73059,6 +73059,7 @@ class Chart {
     this.validateOptions({ width, height });
     this.canvas.width = width;
     this.canvas.height = height;
+    this.chart.resize({ width, height });
     return this;
   }
   generateImage({ type, quality }) {
@@ -73080,7 +73081,7 @@ class Chart {
   generateSvg(ratio) {
     return this.chart.getConnectedDataURL({
       type: "svg",
-      backgroundColor: "transparent",
+      backgroundColor: "#fff",
       pixelRatio: ratio
     });
   }
@@ -73128,20 +73129,15 @@ var createChartImgSrc = async ({
   return URL.createObjectURL(blob);
 };
 var createChartSvg = (option, ratio) => {
-  const perf = new Timing(true);
-  perf.start();
   const chart = new Chart(option);
   try {
     const svg = chart.generateSvg(ratio);
-    perf.log("SVG generation");
     return svg;
   } finally {
     chart.dispose();
   }
 };
-var src_default = Chart;
 export {
-  src_default as default,
   createChartSvg,
   createChartImgSrc,
   createChartImage,

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.1] - 2025-04-10
+### Added
+- Support for debugging via the new debug flag in ChartOption.
+- Timing class now logs detailed performance metrics.
+- Added generateSvg and createChartSvg for SVG export.
+- Added on() method for event handling on charts.
+
+### Changed
+- Chart update now disables animations by default.
+- Refined configuration merging during updates.
+
+### Fixed
+- Improved dimension validation to catch negative values more accurately.
+
 ## [0.1.1] - 2025-03-15
 ### Added
 - New fluent API for chart management.
