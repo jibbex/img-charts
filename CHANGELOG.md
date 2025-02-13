@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.1] - 2025-04-10
+## [0.2.1] - 2025-02-14
 ### Added
 - Support for debugging via the new debug flag in ChartOption.
 - Timing class now logs detailed performance metrics.
@@ -14,7 +14,7 @@
 ### Fixed
 - Improved dimension validation to catch negative values more accurately.
 
-## [0.1.1] - 2025-03-15
+## [0.1.1] - 2025-02-13
 ### Added
 - New fluent API for chart management.
 - Enhanced type safety with updated TypeScript definitions.
