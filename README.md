@@ -31,7 +31,10 @@ const option: ChartOption = {
     height: 768,
 };
 
+const img = document.querySelector('img#chart');
 const chart = createChart(option);
+
+img.src = chart.generateSvg(2);
 ```
 
 ### Update a Chart
